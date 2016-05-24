@@ -1,0 +1,10 @@
+head
+	title Codenames
+	meta(name='viewport', content='width=device-width, initial-scale=1')
+
+body
+
+template(name='main')
+	#main
+		+flashMessages
+		+Template.dynamic template=whichView

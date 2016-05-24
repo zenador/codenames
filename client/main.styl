@@ -1,0 +1,116 @@
+body
+	font-size: 100%
+	
+.hidden
+	display: none
+
+button
+	padding: 0.5em
+	margin: 0.25em 0.5em
+	border: 1px solid #aaa
+	border-radius: 0.5em
+	background-color: white
+	
+select
+	margin-left: 0.5em
+
+#inGame
+	position: absolute
+	height: 100%
+	width: 100%
+	
+#inGame #accessBox
+	padding: 1em
+
+#inGame #logs
+	padding: 0 1em
+	margin: 1em 0
+	max-height: 3em
+	overflow-y: auto
+	line-height: normal
+
+#inGame input.number
+	width: 2em
+	
+#inGame #customWordsForm
+	margin: 0.25em 0.5em
+	
+#inGame #customWordsForm *
+	display: inline-block
+	vertical-align: bottom
+	margin: 0
+	
+#inGame #customWordsForm textarea
+	max-width: 90%
+	width: 15em
+	height: 5em
+
+#inGame ul
+	height: 85%
+	list-style-type: none
+	
+.card
+	text-align: center
+	display: inline-block
+	vertical-align: middle
+	margin: 1%
+	box-sizing: border-box
+	border-style: solid
+	border-width: 3px
+	border-radius: 0.5em
+	color: #fff
+	background-color: #5cb85c
+	border-color: #4cae4c
+
+size(n)
+	width n
+	height n
+	
+for num in (1..25)
+	.card.w{num}
+		size((100 / num - 2)%)
+	
+.card.red
+	color: #fff
+	background-color: #d9534f
+	border-color: #d43f3a
+	
+.card.blue
+	color: #fff
+	background-color: #5bc0de
+	border-color: #46b8da
+	
+.card.yellow
+	color: #fff
+	background-color: #f0ad4e
+	border-color: #eea236
+	
+.card.black
+	color: #fff
+	background-color: #000
+	border-color: #000
+	
+.card.opened
+	opacity: 0.3
+
+for num in (2..4)
+	.card.opened{num}
+		colorNum = 255 - (255 / 3 * (num - 1))
+		border-color: rgb(colorNum,colorNum,colorNum)
+	
+.word
+	position: relative
+	top: 50%
+	-webkit-transform: translateY(-50%)
+	-ms-transform: translateY(-50%)
+	transform: translateY(-50%)
+	pointer-events: none
+	font-size: 2em
+	
+@media (max-width: 800px)
+	.word
+		font-size: 1em
+	
+.card.opened .word
+	text-decoration: line-through
+	

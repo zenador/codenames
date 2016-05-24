@@ -1,0 +1,63 @@
+#inGame
+	#accessBox
+		| access code for normal players: #{accessCode} 
+		a(href="code/#{accessCode}") Link to share this game with normal players
+		if isSpymaster
+			| | master code for spymasters: #{masterCode} 
+			a(href="code/#{masterCode}") Link to share this game with the other spymaster
+		| | 
+		a(href="http://telegram.me/CodenamesBot" target="_blank") Telegram Link
+	#buttons
+		if isRoomState 'preparing'
+			button#startGame Start Game
+			input#gridWidth(name="gridWidth" class="number" type="number" placeholder="" value="#{width}")
+			| x
+			input#gridHeight(name="gridHeight" class="number" type="number" placeholder="" value="#{height}")
+			select#wordListType
+				each wordListTypes
+					option(value="#{key}" selected="#{selected}") #{value}
+			button#resetWords Reset Words
+			button#resetMasterCode Reset Master Code
+		else
+			button#prepareGame Prepare New Game
+			if isSpymaster
+				button#becomeNormal Stop being spymaster
+				| 1
+				input#count1(name="count1" class="number" type="number" placeholder="" value="#{count1}")
+				| 2
+				input#count2(name="count2" class="number" type="number" placeholder="" value="#{count2}")
+				| A
+				input#countA(name="countA" class="number" type="number" placeholder="" value="#{countA}")
+				button#resetColours Reset Colours
+				button#toggleWords Toggle Word Display
+			else
+				input#masterCode(name="masterCode" placeholder="master code" autocorrect="off" autocapitalize="off" type="text")
+				button#becomeMaster Become a spymaster
+				input#reqConfirm(name="reqConfirm" type="checkbox" value="1" checked)
+				| Require Confirmation
+		button#leaveRoom Leave Room
+		if isRoomState 'preparing'
+			div#customWordsForm(class="#{customWordsFormClass}")
+				textarea#customWords #{wordListCustom}
+				//button#saveCustomWords Save Custom Word List
+	+logs
+	ul
+		each gridWords
+			if isRoomState 'preparing'
+				li.card.preparing(data-index='#{index}' class='w#{width}')
+					div.word #{word}
+			else
+				if isSpymaster
+					if equals opened 1
+						li.card.opened(data-index='#{index}' class='#{colour} w#{width} #{openedWhen}')
+							div.word #{word}
+					else
+						li.card(data-index='#{index}' class='#{colour} w#{width}')
+							div.word #{word}
+				else
+					if equals opened 1
+						li.card.started(data-index='#{index}' class='#{colour} w#{width} #{openedWhen}')
+							div.word #{word}
+					else
+						li.card.started(data-index='#{index}' class='w#{width}')
+							div.word #{word}

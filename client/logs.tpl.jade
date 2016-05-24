@@ -1,0 +1,7 @@
+#logs
+	if logs
+		ul
+			each logs
+				li {{formatDateTime createdAt}}: {{{content}}}
+	else
+		| No logs yet.
