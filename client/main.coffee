@@ -147,6 +147,13 @@ Template.inGame.helpers
 			room.masterCode == Session.get 'masterCode'
 		else
 			false
+	colourState: ->
+		room = getCurrentRoom()
+		if room
+			colourState = room.colourList[0] + ': ' + room.pointsList[0] + '/' + room.count1 + ' ' + room.colourList[1] + ': ' + room.pointsList[1] + '/' + room.count2
+			colourState
+		else
+			'?'
 
 Template.inGame.events
 	'click .card.preparing': (event) ->
@@ -180,11 +187,7 @@ Template.inGame.events
 			choice = confirm "Are you sure you want to guess the word '"+word+"'?"
 			if !choice
 				return false
-		for i, val of grid
-			if grid[i] > 1
-				grid[i]--
-		grid[index] = 4
-		Rooms.update room._id, $set: gridOpened: grid, updatedAt: new Date
+		markWordAsGuessed(grid, index, room)
 		teleUpdate(room, "Word guessed: "+word)
 		teleGrid(room, false)
 	'click button#startGame': ->
@@ -192,7 +195,7 @@ Template.inGame.events
 		if !room
 			return false
 		Rooms.update room._id, $set: state: 'started', updatedAt: new Date
-		teleUpdate(room, "Game started")
+		teleUpdate(room, "Game started, first colour is "+room.colourList[0])
 		teleGrid(room, true)
 	'click button#prepareGame': ->
 		room = getCurrentRoom()
@@ -315,6 +318,8 @@ generateNewRoom = ->
 		gridWords: []
 		gridColours: []
 		gridOpened: []
+		colourList: ['?']
+		pointsList: [0, 0]
 		wordListType: 'original'
 		wordListCustom: ["example 1", "example 2", "example 3"]
 		width: 5
@@ -370,7 +375,7 @@ generateGridWords = (room) ->
 	for x in [1..length]
 		index = getRandom(wordList.length)
 		word = wordList[index]
-		wordList.splice(index, 1);
+		wordList.splice(index, 1)
 		grid.push(word)
 	Rooms.update room._id, $set: gridWords: grid, updatedAt: new Date
 
@@ -392,14 +397,14 @@ generateGridColours = (room) ->
 	for x in [1..countB]
 		grid.push("yellow")
 	shuffleArray(grid)
-	Rooms.update room._id, $set: gridColours: grid, updatedAt: new Date
+	Rooms.update room._id, $set: gridColours: grid, colourList: order, updatedAt: new Date
 
 generateGridOpened = (room) ->
 	grid = []
 	length = room.width * room.height
 	for x in [1..length]
 		grid.push(0)
-	Rooms.update room._id, $set: gridOpened: grid, updatedAt: new Date
+	Rooms.update room._id, $set: gridOpened: grid, pointsList: [0, 0], updatedAt: new Date
 
 checkNumber = (thingy) ->
 	if !thingy or typeof thingy is not "number" or isNaN(thingy)

@@ -40,6 +40,8 @@
 			div#customWordsForm(class="#{customWordsFormClass}")
 				textarea#customWords #{wordListCustom}
 				//button#saveCustomWords Save Custom Word List
+		else
+			| #{colourState}
 	+logs
 	ul
 		each gridWords

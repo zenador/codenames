@@ -86,11 +86,7 @@ Meteor.startup ->
 			if gridO[index] >= 1
 				return 'Word already guessed'
 			else
-				for i, val of gridO
-					if gridO[i] > 1
-						gridO[i]--
-				gridO[index] = 4
-				Rooms.update room._id, $set: gridOpened: gridO, updatedAt: new Date
+				markWordAsGuessed(gridO, index, room)
 				printGrid(o.chat.id, room, 0, false)
 				if room.telegramMaster
 					printGrid(room.telegramMaster, room, 1, false)
@@ -142,6 +138,15 @@ Meteor.startup ->
 			return url+"code/"+room.accessCode.replace(/ /g, "%20")
 		else
 			return url
+	TelegramBot.addListener '/webmaster', (c, u, o) ->
+		url = WEB_URL
+		room = Rooms.findOne({telegram: o.chat.id})
+		if room
+			return url+"code/"+room.masterCode.replace(/ /g, "%20")
+		else
+			return url
+	TelegramBot.addListener '/webroot', (c, u, o) ->
+		return WEB_URL
 	TelegramBot.addListener '/help', (c, u, o) ->
 		"/join aaa bbb ccc \n
 		Replace access code with the one for your room on the web app to link this chat to that room as a normal player \n\n
@@ -168,7 +173,13 @@ Meteor.startup ->
 		Delink this chat from the current game room (spymaster or not) \n\n
 
 		/web \n
-		Get link to web app \n\n
+		Get link to web app (with room access code if applicable) \n\n
+
+		/webmaster \n
+		Get link to web app (with access code for spymaster if applicable) \n\n
+
+		/webroot \n
+		Get link to web app (without any access code) \n\n
 
 		For the spymaster, the bolded word in your grid is the most recently guessed, and italicised words are guessed, and the normal text are unguessed
 		"
@@ -219,6 +230,8 @@ noKeyboard = ->
 		row = row.join(' | ')
 		draftGrid.push(row)
 	draftGrid = draftGrid.join('\n------------------------------------------\n')
+	colourState = room.colourList[0] + ': ' + room.pointsList[0] + '/' + room.count1 + ' ' + room.colourList[1] + ': ' + room.pointsList[1] + '/' + room.count2
+	draftGrid = '_' + colourState + '_\n\n' + draftGrid
 	if withKeyboard
 		TelegramBot.method 'sendMessage',
 			chat_id: chatID
