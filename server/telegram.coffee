@@ -200,6 +200,9 @@ getKeyboard = (room) ->
 
 makeKeyboard = (kb) ->
 	JSON.stringify keyboard: kb, one_time_keyboard: true
+
+makeInlineKeyboard = (kb) ->
+	JSON.stringify inline_keyboard: chunkArray(kb, 1)
 	
 noKeyboard = ->
 	JSON.stringify hide_keyboard: true
@@ -229,7 +232,7 @@ noKeyboard = ->
 	for row in chunkedGrid
 		row = row.join(' | ')
 		draftGrid.push(row)
-	draftGrid = draftGrid.join('\n------------------------------------------\n')
+	draftGrid = draftGrid.join('\n---------------------------------\n')
 	colourState = room.colourList[0] + ': ' + room.pointsList[0] + '/' + room.count1 + ' ' + room.colourList[1] + ': ' + room.pointsList[1] + '/' + room.count2
 	draftGrid = '_' + colourState + '_\n\n' + draftGrid
 	if withKeyboard
@@ -243,6 +246,7 @@ noKeyboard = ->
 			chat_id: chatID
 			text: draftGrid
 			parse_mode: "Markdown"
+			reply_markup: makeInlineKeyboard([{text: "Open in Browser", url: WEB_URL}])
 
 @messageFromWeb = (chatID, text, hideKeyboard) ->
 	if hideKeyboard
