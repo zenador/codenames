@@ -1,0 +1,23 @@
+{
+  "name": "codenames",
+  "version": "1.0.0",
+  "description": "Unofficial online clone of the board game 'Codenames' (designed by Vlaada Chvátil and published by Czech Games Edition) with the following features:\r - Replace any word you want if you don't like the generated grid\r - Load custom word lists\r - Customise grid size and number of cards of each colour\r - Connect a game room to a Telegram chat group through a bot to get notified when someone has taken a turn and to make guesses through chat (useful to play it as turn-based instead of real-time, especially when it gets draggy playing with people who like to take their time to think. For now, setup has to be done through the web app first, though this may change later)\r - Hide the words and just use it with physical cards as a colour grid generator\r - Layout responsive to different screens (desktop, mobile, etc)",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/zenador/codenames.git"
+  },
+  "author": "Zenador",
+  "license": "MIT",
+  "homepage": "https://github.com/zenador/codenames#readme",
+  "dependencies": {
+    "@babel/runtime": "^7.11.2"
+  }
+}
