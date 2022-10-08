@@ -18,6 +18,6 @@
   "license": "MIT",
   "homepage": "https://github.com/zenador/codenames#readme",
   "dependencies": {
-    "@babel/runtime": "^7.11.2"
+    "@babel/runtime": "^7.19.0"
   }
 }
